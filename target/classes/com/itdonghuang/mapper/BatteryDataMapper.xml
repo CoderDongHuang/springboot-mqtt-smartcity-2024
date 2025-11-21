@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itdonghuang.mapper.BatteryDataMapper">
+    
+    <insert id="insert" parameterType="com.itdonghuang.entity.BatteryData">
+        INSERT INTO battery_data (VID, PID, T, C)
+        VALUES (#{VID}, #{PID}, #{T}, #{C})
+    </insert>
+    
+    <select id="findByPid" resultType="com.itdonghuang.entity.BatteryData">
+        SELECT * FROM battery_data 
+        WHERE PID = #{pid}
+        ORDER BY time DESC
+    </select>
+    
+    <select id="checkDuplicate" resultType="com.itdonghuang.entity.BatteryData">
+        SELECT * FROM battery_data 
+        WHERE VID = #{vid} 
+        AND PID = #{pid}
+        AND T = #{temperature}
+        AND C = #{capacity}
+        ORDER BY time DESC
+        LIMIT 1
+    </select>
+</mapper> 

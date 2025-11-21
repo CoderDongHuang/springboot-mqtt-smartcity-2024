@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itdonghuang.mapper.BatteryStatusRecordMapper">
+    
+    <insert id="insert" parameterType="com.itdonghuang.entity.BatteryStatusRecord">
+        INSERT INTO battery_status_record (PID, status)
+        VALUES (#{PID}, #{status})
+    </insert>
+    
+    <select id="findByStatus" resultType="com.itdonghuang.entity.BatteryStatusRecord">
+        SELECT * FROM battery_status_record 
+        WHERE status = #{status}
+        ORDER BY time DESC
+    </select>
+    
+    <select id="findAll" resultType="com.itdonghuang.entity.BatteryStatusRecord">
+        SELECT * FROM battery_status_record 
+        ORDER BY time DESC
+    </select>
+</mapper> 

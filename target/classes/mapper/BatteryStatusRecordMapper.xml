@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itdonghuang.mapper.BatteryStatusRecordMapper">
+    
+    <!-- 插入状态记录 -->
+    <insert id="insert" parameterType="com.itdonghuang.entity.BatteryStatusRecord">
+        INSERT INTO battery_status_record (PID, status, time)
+        VALUES (#{PID}, #{status}, #{time})
+    </insert>
+    
+    <!-- 根据状态查询历史记录 -->
+    <select id="findByStatus" resultType="com.itdonghuang.entity.BatteryStatusRecord">
+        SELECT id, PID, status, time
+        FROM battery_status_record
+        WHERE status = #{status}
+        ORDER BY time DESC
+    </select>
+    
+    <!-- 查询所有历史记录 -->
+    <select id="findAll" resultType="com.itdonghuang.entity.BatteryStatusRecord">
+        SELECT id, PID, status, time
+        FROM battery_status_record
+        ORDER BY time DESC
+    </select>
+    
+    <!-- 根据电池ID查询历史记录 -->
+    <select id="findByPid" resultType="com.itdonghuang.entity.BatteryStatusRecord">
+        SELECT id, PID, status, time
+        FROM battery_status_record
+        WHERE PID = #{pid}
+        ORDER BY time DESC
+    </select>
+    
+    <!-- 检查异常状态数据是否重复 -->
+    <select id="checkDuplicate" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM battery_status_record
+            WHERE PID = #{PID}
+            AND status = #{status}
+            AND time = #{time}
+            AND id = (
+                SELECT id FROM battery_status_record 
+                WHERE PID = #{PID} 
+                ORDER BY time DESC 
+                LIMIT 1
+            )
+        )
+    </select>
+    
+</mapper> 

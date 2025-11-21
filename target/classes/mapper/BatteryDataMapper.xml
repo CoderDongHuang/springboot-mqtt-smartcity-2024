@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itdonghuang.mapper.BatteryDataMapper">
+    
+    <!-- 插入电池数据 -->
+    <insert id="insert" parameterType="com.itdonghuang.entity.BatteryData">
+        INSERT INTO battery_data (VID, PID, T, C)
+        VALUES (#{VID}, #{PID}, #{T}, #{C})
+    </insert>
+    
+    <!-- 根据PID查询历史数据 -->
+    <select id="findByPid" resultType="com.itdonghuang.entity.BatteryData">
+        SELECT id, VID, PID, T, C
+        FROM battery_data
+        WHERE PID = #{pid}
+    </select>
+    
+    <!-- 检查数据是否重复（温度和电量都相同时才认为是重复） -->
+    <select id="checkDuplicate" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1 FROM battery_data
+            WHERE PID = #{pid}
+            AND T = #{T}
+            AND C = #{C}
+            AND id = (
+                SELECT id FROM battery_data 
+                WHERE PID = #{pid} 
+                ORDER BY id DESC 
+                LIMIT 1
+            )
+        )
+    </select>
+    
+</mapper> 
